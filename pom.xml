@@ -3,6 +3,7 @@
   <groupId>com.java-management-apps</groupId>
   <artifactId>employee_management</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
   <dependencies>
   	<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
 	<dependency>
