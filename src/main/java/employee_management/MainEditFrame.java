@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -77,12 +80,7 @@ public class MainEditFrame {
 		
 		
 		
-		// Disable editing for id input field
-		for (int i = 0; i < inputFields.size(); i++) {
-			if (inputFields.get(i).getName() == "id") {
-				inputFields.get(i).setEditable(false);
-			}
-		}
+		
 
 		
 		// Add event listener for the Add Employee and Clear button
@@ -110,6 +108,22 @@ public class MainEditFrame {
 		this.wd.setResizable(false);
 		this.wd.pack();
 		this.wd.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		
+		// Disable editing for id input field
+		for (int i = 0; i < inputFields.size(); i++) {
+			if (inputFields.get(i).getName() == "id") {
+				inputFields.get(i).setEditable(false);
+			}
+					
+			if (inputFields.get(i).getName() == "monthly salary") {
+				inputFields.get(i).setEditable(false);
+			}
+					
+			if (inputFields.get(i).getName() == "weekly hour") {
+				inputFields.get(i).addFocusListener(new FocusEvent());
+				inputFields.get(i).addKeyListener(new KeyPressEvent());
+			}
+		}
 	}
 	
 	
@@ -250,22 +264,22 @@ public class MainEditFrame {
 							}
 						}
 						break;
-					case "monthly salary":
-						if (MainEditFrame.inputFields.get(i).getText().isEmpty()) {			
-							JOptionPane.showMessageDialog(MainEditFrame.this.wd, "Monthly Salary is empty!");
-							
-							System.out.println(MainEditFrame.inputFields.get(i).getName() + " is empty");
-							correctFormat = false;
-						} else {
-							try {
-								Integer.parseInt(MainEditFrame.inputFields.get(i).getText());
-							} catch (NumberFormatException ex) {
-								JOptionPane.showMessageDialog(MainEditFrame.this.wd, "Monthly Salary must be an integer!");						
-								System.out.println(ex);
-								correctFormat = false;
-							}
-						}
-						break;
+//					case "monthly salary":
+//						if (MainEditFrame.inputFields.get(i).getText().isEmpty()) {			
+//							JOptionPane.showMessageDialog(MainEditFrame.this.wd, "Monthly Salary is empty!");
+//							
+//							System.out.println(MainEditFrame.inputFields.get(i).getName() + " is empty");
+//							correctFormat = false;
+//						} else {
+//							try {
+//								Integer.parseInt(MainEditFrame.inputFields.get(i).getText());
+//							} catch (NumberFormatException ex) {
+//								JOptionPane.showMessageDialog(MainEditFrame.this.wd, "Monthly Salary must be an integer!");						
+//								System.out.println(ex);
+//								correctFormat = false;
+//							}
+//						}
+//						break;
 				} // end of switch statement												
 			}
 			
@@ -306,7 +320,8 @@ public class MainEditFrame {
 							newWhData = MainEditFrame.inputFields.get(i).getText();
 							break;
 						case "monthly salary":
-							newMsData = MainEditFrame.inputFields.get(i).getText();
+							int ms = Data.PAYRATE * Integer.parseInt(newWhData) * 4;
+							newMsData = String.valueOf(ms);
 							break;
 					}
 				}
@@ -352,6 +367,64 @@ public class MainEditFrame {
 				}
 				
 			} // end of if statement - collecting data
+		}
+	}
+	
+class FocusEvent implements FocusListener {
+
+		
+		@Override
+		public void focusGained(java.awt.event.FocusEvent e) {
+			System.out.println("focus gained");
+			
+		}
+
+		@Override
+		public void focusLost(java.awt.event.FocusEvent e) {
+			System.out.println("focus lost");
+			String whNum = MainEditFrame.inputFields.get(MainAddFrame.whInd).getText();
+			
+			if (whNum.isEmpty()) {
+				return;
+			} else {
+				int salary_m = Data.PAYRATE * Integer.parseInt(whNum) * 4;
+				MainEditFrame.inputFields.get(MainAddFrame.msInd).setText(String.valueOf(salary_m));
+				System.out.println(salary_m);
+			}
+			
+		}
+
+	}
+	
+	class KeyPressEvent implements KeyListener {
+
+		@Override
+		public void keyTyped(java.awt.event.KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyPressed(java.awt.event.KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				System.out.println("enter pressed");
+				String whNum = MainEditFrame.inputFields.get(MainAddFrame.whInd).getText();
+				
+				if (whNum.isEmpty()) {
+					return;
+				} else {
+					int salary_m = Data.PAYRATE * Integer.parseInt(whNum) * 4;
+					MainEditFrame.inputFields.get(MainAddFrame.msInd).setText(String.valueOf(salary_m));
+					System.out.println(salary_m);
+				}
+			}
+			
+		}
+
+		@Override
+		public void keyReleased(java.awt.event.KeyEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}

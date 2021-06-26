@@ -16,6 +16,9 @@ public class Data {
 	protected static final String PASSWORD = "";
 	protected static final String CONNECTION = "jdbc:h2:~/db";
 	
+	// pay rate
+	protected static final int PAYRATE = 14;
+	
 	// Columns' names for the table model
 	private static String[] column_names = {"ID", "Firstname", "Lastname", "Age", "Phone", "Email", "WeeklyHour", "Salary (Monthly)"};
 	
