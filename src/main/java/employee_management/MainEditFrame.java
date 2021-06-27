@@ -5,9 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -22,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.text.AbstractDocument;
 
 /**
  * This class contains the structure and layout of the Edit Employee window
@@ -78,15 +76,10 @@ public class MainEditFrame {
 		
 		
 		
-		
-		
-		
-
-		
 		// Add event listener for the Add Employee and Clear button
 		this.save_button.addActionListener(new SaveEmployeeEvent());
 		
-		// create an add button and a second panel that contains the button
+		// create a second panel that contains the button
 		this.second_p.setLayout(new FlowLayout(FlowLayout.TRAILING));
 		this.second_p.setPreferredSize(new Dimension(400,50));
 		// this.second_p.setBorder(BorderFactory.createLineBorder(new Color(255,0,0)));
@@ -122,6 +115,7 @@ public class MainEditFrame {
 			if (inputFields.get(i).getName() == "weekly hour") {
 				inputFields.get(i).addFocusListener(new FocusEvent(inputFields));
 				inputFields.get(i).addKeyListener(new KeyPressEvent(inputFields));
+				((AbstractDocument)inputFields.get(i).getDocument()).setDocumentFilter(new IntFilter());
 			}
 		}
 	}
@@ -369,63 +363,4 @@ public class MainEditFrame {
 			} // end of if statement - collecting data
 		}
 	}
-	
-//	class FocusEvent implements FocusListener {
-//
-//		
-//		@Override
-//		public void focusGained(java.awt.event.FocusEvent e) {
-//			System.out.println("focus gained");
-//			
-//		}
-//
-//		@Override
-//		public void focusLost(java.awt.event.FocusEvent e) {
-//			System.out.println("focus lost");
-//			String whNum = MainEditFrame.inputFields.get(MainAddFrame.whInd).getText();
-//			
-//			if (whNum.isEmpty()) {
-//				return;
-//			} else {
-//				int salary_m = Data.PAYRATE * Integer.parseInt(whNum) * 4;
-//				MainEditFrame.inputFields.get(MainAddFrame.msInd).setText(String.valueOf(salary_m));
-//				System.out.println(salary_m);
-//			}
-//			
-//		}
-//
-//	}
-//	
-//	class KeyPressEvent implements KeyListener {
-//
-//		@Override
-//		public void keyTyped(java.awt.event.KeyEvent e) {
-//			// TODO Auto-generated method stub
-//			
-//		}
-//
-//		@Override
-//		public void keyPressed(java.awt.event.KeyEvent e) {
-//			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//				System.out.println("enter pressed");
-//				String whNum = MainEditFrame.inputFields.get(MainAddFrame.whInd).getText();
-//				
-//				if (whNum.isEmpty()) {
-//					return;
-//				} else {
-//					int salary_m = Data.PAYRATE * Integer.parseInt(whNum) * 4;
-//					MainEditFrame.inputFields.get(MainAddFrame.msInd).setText(String.valueOf(salary_m));
-//					System.out.println(salary_m);
-//				}
-//			}
-//			
-//		}
-//
-//		@Override
-//		public void keyReleased(java.awt.event.KeyEvent e) {
-//			// TODO Auto-generated method stub
-//			
-//		}
-//		
-//	}
 }
