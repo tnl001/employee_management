@@ -20,7 +20,7 @@ public class Data {
 	protected static final int PAYRATE = 14;
 	
 	// Columns' names for the table model
-	private static String[] column_names = {"ID", "Firstname", "Lastname", "Age", "Phone", "Email", "WeeklyHour", "Salary (Monthly)"};
+	private static String[] column_names = {"ID", "Firstname", "Lastname", "Age", "Phone", "Email", "WeeklyHour", "HourlyPay", "Salary (Monthly)"};
 	
 	// Creating a table model with specified columns' names and 0 rows
 	@SuppressWarnings("serial")
@@ -70,9 +70,10 @@ public class Data {
 				String phone = result.getString("phone");
 				String email = result.getString("email");
 				int weekly_hour = result.getInt("weekly_hour");
+				int hourly_pay = result.getInt("pay_rate");
 				int monthly_sal = result.getInt("monthly_salary");
 				
-				model.addRow(new Object[] {id, firstname, lastname, age, phone, email, weekly_hour, monthly_sal});
+				model.addRow(new Object[] {id, firstname, lastname, age, phone, email, weekly_hour, hourly_pay, monthly_sal});
 			}
 			
 		} catch (Exception e) {

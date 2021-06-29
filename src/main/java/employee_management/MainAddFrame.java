@@ -5,9 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -45,13 +42,14 @@ public class MainAddFrame {
 	
 	
 	// Labels and names to be used
-	private String[] labels = {"id: ", "firstname: ", "lastname: ", "age: ", "phone: ", "email: ", "weekly hour: ", "monthly salary: "};
-	private String[] names = {"id", "firstname", "lastname", "age", "phone", "email", "weekly hour", "monthly salary"};
+	private String[] labels = {"id: ", "firstname: ", "lastname: ", "age: ", "phone: ", "email: ", "weekly hour: ", "hourly pay: ", "monthly salary: "};
+	private String[] names = {"id", "firstname", "lastname", "age", "phone", "email", "weekly hour", "hourly pay", "monthly salary"};
 
 	
 
 	protected static int whInd = 0;
 	protected static int msInd = 0;
+	protected static int hpInd = 0;
 	
 
 	// This Arraylist contains the JTextFields created by the current frame
@@ -136,6 +134,13 @@ public class MainAddFrame {
 			
 			if (inputFields.get(i).getName() == "weekly hour") {
 				whInd = i;
+				inputFields.get(i).addFocusListener(new FocusEvent(inputFields));
+				inputFields.get(i).addKeyListener(new KeyPressEvent(inputFields));
+				((AbstractDocument)inputFields.get(i).getDocument()).setDocumentFilter(new IntFilter());
+			}
+			
+			if (inputFields.get(i).getName() == "hourly pay") {
+				hpInd = i;
 				inputFields.get(i).addFocusListener(new FocusEvent(inputFields));
 				inputFields.get(i).addKeyListener(new KeyPressEvent(inputFields));
 				((AbstractDocument)inputFields.get(i).getDocument()).setDocumentFilter(new IntFilter());
@@ -305,6 +310,22 @@ public class MainAddFrame {
 							}
 						}
 						break;
+					case "hourly pay":
+						if (MainAddFrame.inputFields.get(i).getText().isEmpty()) {			
+							JOptionPane.showMessageDialog(MainAddFrame.this.wd, "Hourly pay is empty!");
+							
+							System.out.println(MainAddFrame.inputFields.get(i).getName() + " is empty");
+							correctFormat = false;
+						} else {
+							try {
+								Integer.parseInt(MainAddFrame.inputFields.get(i).getText());
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(MainAddFrame.this.wd, "Hourly pay must be an integer!");						
+								System.out.println(ex);
+								correctFormat = false;
+							}
+						}
+						break;
 //					case "monthly salary":
 //						if (MainAddFrame.inputFields.get(i).getText().isEmpty()) {			
 //							JOptionPane.showMessageDialog(MainAddFrame.this.wd, "Monthly Salary is empty!");
@@ -334,6 +355,7 @@ public class MainAddFrame {
 				String phoneData = null;
 				String emailData = null;
 				String whData = null;
+				String hpData = null;
 				String msData = null;
 				
 				for (int i = 0; i < MainAddFrame.inputFields.size(); i++) {
@@ -359,9 +381,16 @@ public class MainAddFrame {
 						case "weekly hour":
 							whData = MainAddFrame.inputFields.get(i).getText();
 							break;
+						case "hourly pay":
+							hpData = MainAddFrame.inputFields.get(i).getText();
 						case "monthly salary":
-							int ms = Data.PAYRATE * Integer.parseInt(whData) * 4;
-							msData = String.valueOf(ms);
+							if (whData == null || hpData == null) {
+								JOptionPane.showMessageDialog(MainAddFrame.this.wd, "Both weekly hour AND hourly pay must be filled!");	
+								break;
+							} else {
+								int ms = Integer.parseInt(hpData) * Integer.parseInt(whData) * 4;
+								msData = String.valueOf(ms);
+							}
 							break;
 					}
 				}
@@ -372,8 +401,8 @@ public class MainAddFrame {
 				// Creating a connection and a statement
 				Connection conn;
 				Statement stm;
-				String sql_stm = String.format("INSERT INTO employee(id, firstname, lastname, age, phone, email, weekly_hour, monthly_salary)"
-						+ "\nVALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", idData, fnData, lnData, ageData, phoneData, emailData, whData, msData);
+				String sql_stm = String.format("INSERT INTO employee(id, firstname, lastname, age, phone, email, weekly_hour, pay_rate, monthly_salary)"
+						+ "\nVALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", idData, fnData, lnData, ageData, phoneData, emailData, whData, hpData, msData);
 				System.out.println(sql_stm);
 				
 				try {
@@ -384,7 +413,7 @@ public class MainAddFrame {
 					conn = DriverManager.getConnection(Data.CONNECTION, Data.USERNAME, Data.PASSWORD);
 					stm = conn.createStatement();
 					stm.executeUpdate(sql_stm);	
-					Data.model.addRow(new Object[] {idData, fnData, lnData, ageData, phoneData, emailData, whData, msData});
+					Data.model.addRow(new Object[] {idData, fnData, lnData, ageData, phoneData, emailData, whData, hpData, msData});
 					
 				} catch(SQLIntegrityConstraintViolationException exc) {
 					JOptionPane.showMessageDialog(MainAddFrame.this.wd, "Duplicate ID entry!");

@@ -25,11 +25,12 @@ public class FocusEvent implements FocusListener {
 	public void focusLost(java.awt.event.FocusEvent e) {
 		System.out.println("focus lost");
 		String whNum = this.inputFields.get(MainAddFrame.whInd).getText();
+		String pay_rate = this.inputFields.get(MainAddFrame.hpInd).getText();
 		
-		if (whNum.isEmpty()) {
+		if (whNum.isEmpty() || pay_rate.isEmpty()) {
 			return;
 		} else {
-			int salary_m = Data.PAYRATE * Integer.parseInt(whNum) * 4;
+			int salary_m =  Integer.parseInt(pay_rate) * Integer.parseInt(whNum) * 4;
 			this.inputFields.get(MainAddFrame.msInd).setText(String.valueOf(salary_m));
 			System.out.println(salary_m);
 		}

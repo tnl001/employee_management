@@ -89,6 +89,7 @@ public class LoginFrame {
 		// this.main.add(secondP);
 		this.main.add(mainP);
 		
+		
 		this.main.setTitle("SECURED LOGIN");
 		this.main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.main.setSize(500,500);

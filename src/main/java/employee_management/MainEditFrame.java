@@ -38,8 +38,8 @@ public class MainEditFrame {
 	private JButton save_button = new JButton("Save");
 
 	// labels and names to be used
-	private String[] labels = {"id: ", "firstname: ", "lastname: ", "age: ", "phone: ", "email: ", "weekly hour: ", "monthly salary: "};
-	private String[] names = {"id", "firstname", "lastname", "age", "phone", "email", "weekly hour", "monthly salary"};
+	private String[] labels = {"id: ", "firstname: ", "lastname: ", "age: ", "phone: ", "email: ", "weekly hour: ", "hourly pay: ", "monthly salary: "};
+	private String[] names = {"id", "firstname", "lastname", "age", "phone", "email", "weekly hour", "hourly pay", "monthly salary"};
 	
 	// This Arraylist contains the JTextFields created by the current frame
 	protected static ArrayList<JTextField> inputFields = new ArrayList<>();
@@ -113,6 +113,12 @@ public class MainEditFrame {
 			}
 					
 			if (inputFields.get(i).getName() == "weekly hour") {
+				inputFields.get(i).addFocusListener(new FocusEvent(inputFields));
+				inputFields.get(i).addKeyListener(new KeyPressEvent(inputFields));
+				((AbstractDocument)inputFields.get(i).getDocument()).setDocumentFilter(new IntFilter());
+			}
+			
+			if (inputFields.get(i).getName() == "hourly pay") {
 				inputFields.get(i).addFocusListener(new FocusEvent(inputFields));
 				inputFields.get(i).addKeyListener(new KeyPressEvent(inputFields));
 				((AbstractDocument)inputFields.get(i).getDocument()).setDocumentFilter(new IntFilter());
@@ -287,6 +293,7 @@ public class MainEditFrame {
 				String newPhoneData = null;
 				String newEmailData = null;
 				String newWhData = null;
+				String newHpData = null;
 				String newMsData = null;
 				
 				// Collect the data from the input fields
@@ -313,9 +320,17 @@ public class MainEditFrame {
 						case "weekly hour":
 							newWhData = MainEditFrame.inputFields.get(i).getText();
 							break;
+						case "hourly pay":
+							newHpData = MainEditFrame.inputFields.get(i).getText();
+							break;
 						case "monthly salary":
-							int ms = Data.PAYRATE * Integer.parseInt(newWhData) * 4;
-							newMsData = String.valueOf(ms);
+							if (newWhData == null || newHpData == null) {
+								JOptionPane.showMessageDialog(MainEditFrame.this.wd, "Both weekly hour AND hourly pay must be filled!");	
+								break;
+							} else {
+								int ms = Integer.parseInt(newHpData) * Integer.parseInt(newWhData) * 4;
+								newMsData = String.valueOf(ms);
+							}
 							break;
 					}
 				}
@@ -329,8 +344,8 @@ public class MainEditFrame {
 				
 				// Execute this mysql statement to update the database
 				String sql_stm = String.format("UPDATE employee"
-						+ "\nSET firstname = '%s', lastname = '%s', age = '%s', phone = '%s', email = '%s', weekly_hour = '%s', monthly_salary = '%s'"
-						+ "\nWHERE id = '%s';", newFnData, newLnData, newAgeData, newPhoneData, newEmailData, newWhData, newMsData, newIdData);
+						+ "\nSET firstname = '%s', lastname = '%s', age = '%s', phone = '%s', email = '%s', weekly_hour = '%s', pay_rate = '%s', monthly_salary = '%s'"
+						+ "\nWHERE id = '%s';", newFnData, newLnData, newAgeData, newPhoneData, newEmailData, newWhData, newHpData, newMsData, newIdData);
 				System.out.println(sql_stm);
 				
 				
@@ -352,7 +367,8 @@ public class MainEditFrame {
 					Data.model.setValueAt(newPhoneData, rowInd, 4);
 					Data.model.setValueAt(newEmailData, rowInd, 5);
 					Data.model.setValueAt(newWhData, rowInd, 6);
-					Data.model.setValueAt(newMsData, rowInd, 7);
+					Data.model.setValueAt(newHpData, rowInd, 7);
+					Data.model.setValueAt(newMsData, rowInd, 8);
 					
 				} catch(SQLIntegrityConstraintViolationException exc) {
 					JOptionPane.showMessageDialog(MainEditFrame.this.wd, "Duplicate ID entry!");

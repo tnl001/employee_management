@@ -29,7 +29,8 @@ public class EditButtonEvent implements ActionListener {
 			Object phoneData = MainFrame.main_table.getValueAt(rowInd, 4);
 			Object emailData = MainFrame.main_table.getValueAt(rowInd, 5);
 			Object whData = MainFrame.main_table.getValueAt(rowInd, 6);
-			Object msData = MainFrame.main_table.getValueAt(rowInd, 7);
+			Object hpData = MainFrame.main_table.getValueAt(rowInd, 7);
+			Object msData = MainFrame.main_table.getValueAt(rowInd, 8);
 			
 			for (int i = 0; i < MainEditFrame.inputFields.size(); i++) {
 				switch(MainEditFrame.inputFields.get(i).getName()) {
@@ -53,6 +54,9 @@ public class EditButtonEvent implements ActionListener {
 						break;
 					case "weekly hour":
 						MainEditFrame.inputFields.get(i).setText(String.valueOf(whData));
+						break;
+					case "hourly pay":
+						MainEditFrame.inputFields.get(i).setText(String.valueOf(hpData));
 						break;
 					case "monthly salary":
 						MainEditFrame.inputFields.get(i).setText(String.valueOf(msData));
