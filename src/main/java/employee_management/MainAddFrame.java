@@ -3,6 +3,7 @@ package employee_management;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -81,6 +82,7 @@ public class MainAddFrame {
 			
 			// Setting the label to the textfield and adding it to the first panel of this frame
 			label.setLabelFor(input);
+			label.setFont(new Font("", Font.PLAIN, 16));
 			first_p.add(input);
 		}
 		

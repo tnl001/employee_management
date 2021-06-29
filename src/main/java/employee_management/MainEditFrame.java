@@ -3,6 +3,7 @@ package employee_management;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -68,6 +69,7 @@ public class MainEditFrame {
 			
 			// Setting the label to the textfield and adding it to the first panel of this frame
 			label.setLabelFor(input);
+			label.setFont(new Font("", Font.PLAIN, 16));
 			first_p.add(input);
 		}
 		
@@ -259,6 +261,22 @@ public class MainEditFrame {
 								Integer.parseInt(MainEditFrame.inputFields.get(i).getText());
 							} catch (NumberFormatException ex) {
 								JOptionPane.showMessageDialog(MainEditFrame.this.wd, "Weekly Hour must be an integer!");						
+								System.out.println(ex);
+								correctFormat = false;
+							}
+						}
+						break;
+					case "hourly pay":
+						if (MainEditFrame.inputFields.get(i).getText().isEmpty()) {			
+							JOptionPane.showMessageDialog(MainEditFrame.this.wd, "Hourly Pay is empty!");
+							
+							System.out.println(MainEditFrame.inputFields.get(i).getName() + " is empty");
+							correctFormat = false;
+						} else {
+							try {
+								Integer.parseInt(MainEditFrame.inputFields.get(i).getText());
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(MainEditFrame.this.wd, "Hourly Pay must be an integer!");						
 								System.out.println(ex);
 								correctFormat = false;
 							}

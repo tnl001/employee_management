@@ -38,11 +38,7 @@ public class MainFrame {
 		this.main_window.setSize(1000, 1000);
 		this.main_window.setLocationRelativeTo(null);
 		this.main_window.setResizable(false);
-		
-		
-		
-		
-		
+			
 
 		// TABLE / SCROLL
 		// Create the table and the scroll panel and put the table inside the scroll panel
@@ -55,7 +51,7 @@ public class MainFrame {
 		this.main_scroll.setBorder(BorderFactory.createEmptyBorder());
 		this.main_scroll.getViewport().setBackground(new Color(100,100,100));
 		this.main_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		this.main_scroll.setPreferredSize(new Dimension(900,500));
+		this.main_scroll.setPreferredSize(new Dimension(1000,500));
 		this.main_scroll.setBackground(Color.black);
 		
 		
